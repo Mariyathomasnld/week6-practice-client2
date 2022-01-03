@@ -22,11 +22,19 @@ function AllSpacesPage() {
   useEffect(() => {
     dispatch(fetchAllSpaces);
   }, []);
+ 
 
   return (
     <div>
       <Jumbotron>
-        <h1>Spaces</h1>
+        <h1
+          className="mb-4"
+          style={{
+            padding: "20px",
+          }}
+        >
+          Spaces
+        </h1>
       </Jumbotron>
       <Container>
         {spaces.map((space) => {

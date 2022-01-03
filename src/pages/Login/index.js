@@ -25,7 +25,11 @@ export default function SignUp() {
     console.log("hi");
     event.preventDefault();
 
+
+
+
     dispatch(login(email, password));
+    //here the loginfunction fetches userdetail,space,stories and token.
 
     setEmail("");
     setPassword("");

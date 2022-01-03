@@ -10,9 +10,10 @@ function StoryCard(props) {
         className="mt-5"
         style={{
           backgroundImage: `url(${props.imageUrl})`,
-
+          
           padding: "40px",
           textAlign: "center",
+         
         }}
       >
         <Card.Text key={props.id}>

@@ -4,6 +4,7 @@ const initialState = {
   token: localStorage.getItem("token"),
   name: null,
   email: null,
+  space: null,
 };
 
 export default function user(state = initialState, action) {
@@ -18,6 +19,37 @@ export default function user(state = initialState, action) {
 
     case TOKEN_STILL_VALID:
       return { ...state, ...action.payload };
+
+    case "postStories": {
+      return {
+        ...state,
+
+        space: {
+          ...state.space,
+          stories: [...state.space.stories, action.payload],
+        },
+      };
+    }
+    case "updateMySpace": {
+      return {
+        ...state,
+
+        space: {
+          ...state.space,
+          stories: [...state.space, action.payload],
+        },
+      };
+    }
+    case "deleteStories": {
+      return {
+        ...state,
+
+        space: {
+          ...state.space,
+          stories: [...state.space, action.payload],
+        },
+      };
+    }
 
     default:
       return state;

@@ -1,6 +1,6 @@
 import { apiUrl } from "../../config/constants";
 import axios from "axios";
-import { selectToken } from "./selectors";
+import { selectToken, selectUser } from "./selectors";
 import {
   appLoading,
   appDoneLoading,
@@ -24,7 +24,26 @@ const tokenStillValid = (userWithoutToken) => ({
   payload: userWithoutToken,
 });
 
+export const update_My_Space = (updatedSpace) => ({
+  type: "updateMySpace",
+  payload: updatedSpace,
+});
+export const post_Stories = (data) => ({
+  type: "postStories",
+  payload: data,
+});
+
+export const delete_Stories = (data) => ({
+  type: "deleteStories",
+  payload: data,
+});
+
 export const logOut = () => ({ type: LOG_OUT });
+
+export async function logout(dispatch, getState) {
+  localStorage.removeItem("token");
+  dispatch(logOut());
+}
 
 export const signUp = (name, email, password) => {
   return async (dispatch, getState) => {
@@ -52,6 +71,19 @@ export const signUp = (name, email, password) => {
   };
 };
 
+export async function bootstrapLoginState(dispatch, getState) {
+  const token = localStorage.getItem("token");
+  if (token) {
+    dispatch(loginSuccess(token));
+    const response_me = await axios.get(`${apiUrl}/auth/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    dispatch(tokenStillValid(response_me.data));
+  }
+}
+
 export const login = (email, password) => {
   return async (dispatch, getState) => {
     dispatch(appLoading());
@@ -60,6 +92,9 @@ export const login = (email, password) => {
         email,
         password,
       });
+
+      const token = response.data.jwt;
+      localStorage.setItem("token", token);
 
       dispatch(loginSuccess(response.data));
       dispatch(showMessageWithTimeout("success", false, "welcome back!", 1500));
@@ -106,6 +141,98 @@ export const getUserWithStoredToken = () => {
       // get rid of the token by logging out
       dispatch(logOut());
       dispatch(appDoneLoading());
+    }
+  };
+};
+
+export const postStory = (name, content, imageUrl) => {
+  return async (dispatch, getState) => {
+    try {
+      const { space, token } = selectUser(getState());
+      console.log(name, content, imageUrl);
+      dispatch(appLoading());
+
+      const response = await axios.post(
+        `${apiUrl}/spaces/${space.id}/stories`,
+        {
+          name,
+          content,
+          imageUrl,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // console.log("Yep!", response);
+      dispatch(
+        showMessageWithTimeout("success", false, response.data.message, 3000)
+      );
+      dispatch(post_Stories(response.data.stories));
+      dispatch(appDoneLoading());
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+};
+
+export const updateMySpace = (title, description, backgroundColor, color) => {
+  return async (dispatch, getState) => {
+    try {
+      const { space, token } = selectUser(getState());
+      dispatch(appLoading());
+
+      const response = await axios.patch(
+        `${apiUrl}/spaces/${space.id}`,
+        {
+          title,
+          description,
+          backgroundColor,
+          color,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // console.log(response);
+
+      dispatch(
+        showMessageWithTimeout("success", false, "update successfull", 3000)
+      );
+      dispatch(updateMySpace(response.data));
+      dispatch(appDoneLoading());
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+};
+
+export const deleteStory = (storyId) => {
+  return async (dispatch, getState) => {
+    dispatch(appLoading());
+    const { space, token } = selectUser(getState());
+    const spaceId = space.id;
+    // make an axios request to delete
+    // and console.log the response if success
+    try {
+      const response = await axios.delete(
+        `${apiUrl}/spaces/${spaceId}/stories/${storyId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Story deleted?", response.data);
+      dispatch(delete_Stories(storyId));
+      dispatch(appDoneLoading());
+    } catch (e) {
+      console.error(e);
     }
   };
 };

@@ -11,7 +11,7 @@ function SpaceCard(props) {
         style={{
           backgroundColor: props.backgroundColor,
           color: props.color,
-          padding: "40px",
+          padding: "20px",
           textAlign: "center",
         }}
       >
