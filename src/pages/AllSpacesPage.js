@@ -10,9 +10,9 @@ import { useEffect } from "react";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
 
-import SpaceCard from "../../components/SpaceCard";
-import { fetchAllSpaces } from "../../store/space/actions";
-import { selectSpaces } from "../../store/space/selectors";
+import SpaceCard from "../components/SpaceCard";
+import { fetchAllSpaces } from "../store/space/actions";
+import { selectSpaces } from "../store/space/selectors";
 
 function AllSpacesPage() {
   const dispatch = useDispatch();

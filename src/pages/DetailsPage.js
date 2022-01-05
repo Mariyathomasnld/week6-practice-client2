@@ -9,12 +9,11 @@ import { useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import { useParams } from "react-router";
 
-import Loading from "../components/Loading";
+import Loading from "../components/Loading/Loading";
 import SpaceCard from "../components/SpaceCard";
 import { fetchSpaceById } from "../store/space/actions";
 import { selectSpaceDetails } from "../store/space/selectors";
 import StoryCard from "../components/StoryCard";
-import Carousel from "react-bootstrap/esm/Carousel";
 
 function DetailsPage() {
   const { id } = useParams();
@@ -42,6 +41,8 @@ function DetailsPage() {
         {space.stories.map((story) => {
           return (
             <StoryCard
+              key={story.id}
+              id={story.id}
               name={story.name}
               content={story.content}
               imageUrl={story.imageUrl}

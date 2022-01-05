@@ -20,7 +20,7 @@ function PostStoryForm() {
     event.preventDefault();
 
     // console.log(name, content, imageUrl);
-    dispatch(postStory(name, content, imageUrl));
+dispatch(postStory(name, content, imageUrl));
   }
 
   return (

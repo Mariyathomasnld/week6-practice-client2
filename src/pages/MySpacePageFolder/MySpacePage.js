@@ -1,4 +1,3 @@
-
 import { Container } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import { Button } from "react-bootstrap";
@@ -12,20 +11,19 @@ import PostStoryForm from "./PostStoryForm";
 import SpaceCard from "../../components/SpaceCard";
 import StoryCard from "../../components/StoryCard";
 import { selectUser } from "../../store/user/selectors";
-import Loading from "../../components/Loading";
+import Loading from "../../components/Loading/Loading";
 import { deleteStory } from "../../store/user/actions";
 
 function MySpacePage() {
   const { token, space, id } = useSelector(selectUser);
-  const navigate = useNavigate;
+  const navigate = useNavigate();
   const [editMode, setEditMode] = useState(false);
   const [postStoryMode, setpostStoryMode] = useState(false);
-  // const dispatch = useDispatch;
-  // const onDelete = (id) => {
-  //   console.log("deleting story!", id);
-  //   dispatch(deleteStory(id));
-  // };
-
+  const dispatch = useDispatch();
+  const onDelete = (id) => {
+    console.log("deleting story!", id);
+    dispatch(deleteStory(id));
+  };
 
   if (token === null) {
     navigate("/");
@@ -37,7 +35,6 @@ function MySpacePage() {
 
   const displayButtons = id === space.userId;
 
-
   return (
     <>
       <h1
@@ -48,7 +45,9 @@ function MySpacePage() {
       >
         My Space
       </h1>
+
       <SpaceCard
+        key={space.id}
         id={space.id}
         title={space.title}
         description={space.description}
@@ -87,16 +86,16 @@ function MySpacePage() {
             return (
               <>
                 <StoryCard
+                  key={story.id}
                   name={story.name}
                   content={story.content}
                   imageUrl={story.imageUrl}
                   backgroundColor={space.backgroundColor}
                   color={space.color}
-                 
                 />
-                {/* <Button variant="danger" onClick={() => onDelete(story.id)}>
+                <Button variant="danger" onClick={() => onDelete(story.id)}>
                   Delete story
-                </Button> */}
+                </Button>
               </>
             );
           })}

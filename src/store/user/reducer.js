@@ -20,38 +20,62 @@ export default function user(state = initialState, action) {
     case TOKEN_STILL_VALID:
       return { ...state, ...action.payload };
 
-    case "postStories": {
+    
+    
+    
+    
+      case "postStories": {
       return {
         ...state,
 
         space: {
           ...state.space,
-          stories: [...state.space.stories, action.payload],
+          stories: [...state.space.stories,action.payload],
         },
       };
     }
+
+// case "postStories": 
+
+
+//     const story =action.payload
+//     const addstory = state.space.stories.push(
+//       story 
+//     );
+//     return {
+//       ...state,
+//       space: {
+//         ...state.space,
+//         stories: addstory
+//       }
+//     };
+
+   
+    
     case "updateMySpace": {
       return {
         ...state,
-
-        space: {
-          ...state.space,
-          stories: [...state.space, action.payload],
-        },
-      };
-    }
-    case "deleteStories": {
-      return {
-        ...state,
-
-        space: {
-          ...state.space,
-          stories: [...state.space, action.payload],
-        },
+        
+    space: { ...action.payload, stories: [state.space.stories] }
+     
       };
     }
 
-    default:
-      return state;
-  }
+    
+    case "deleteStories": 
+    const storyId = action.payload;
+    const newStories = state.space.stories.filter(
+      story => story.id !== storyId
+    );
+    return {
+      ...state,
+      space: {
+        ...state.space,
+        stories: newStories
+      }
+    };
+
+  default:
+    return state;
 }
+};

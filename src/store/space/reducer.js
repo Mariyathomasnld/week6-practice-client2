@@ -1,7 +1,7 @@
 const initialState = {
   loading: true,
   spaces: [],
-  space:null
+  space: null,
 };
 
 //case name and type from actions need to be the same
@@ -19,7 +19,7 @@ export default function spacessliceReducer(state = initialState, action) {
       return {
         ...state,
 
-        spaces: [...state.spaces, ...action.payload],
+        spaces: [...action.payload],
       };
     }
     case "spacedetailsFetched": {

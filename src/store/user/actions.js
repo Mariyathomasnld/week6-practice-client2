@@ -170,8 +170,8 @@ export const postStory = (name, content, imageUrl) => {
       dispatch(
         showMessageWithTimeout("success", false, response.data.message, 3000)
       );
-      dispatch(post_Stories(response.data.stories));
-      dispatch(appDoneLoading());
+      dispatch(post_Stories(response.data));
+       dispatch(appDoneLoading());
     } catch (e) {
       console.log(e.message);
     }
@@ -186,7 +186,7 @@ export const updateMySpace = (title, description, backgroundColor, color) => {
 
       const response = await axios.patch(
         `${apiUrl}/spaces/${space.id}`,
-        {
+        { 
           title,
           description,
           backgroundColor,
@@ -203,13 +203,16 @@ export const updateMySpace = (title, description, backgroundColor, color) => {
       dispatch(
         showMessageWithTimeout("success", false, "update successfull", 3000)
       );
-      dispatch(updateMySpace(response.data));
+      dispatch(update_My_Space(response.data));
       dispatch(appDoneLoading());
     } catch (e) {
       console.log(e.message);
     }
   };
 };
+
+
+
 
 export const deleteStory = (storyId) => {
   return async (dispatch, getState) => {
